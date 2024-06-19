@@ -1,5 +1,6 @@
-streamlit
-pandas
-numpy
-scikit-learn
-joblib
+streamlit==1.13.0  # Streamlit'in belirli bir sürümü
+joblib==1.2.0     # Joblib'in belirli bir sürümü
+numpy==1.23.1     # Numpy'ın belirli bir sürümü
+pandas==1.4.3     # Pandas'ın belirli bir sürümü
+scikit-learn==1.1.1  # Scikit-learn'in belirli bir sürümü
+catboost==1.0.4   # Catboost'un belirli bir sürümü
