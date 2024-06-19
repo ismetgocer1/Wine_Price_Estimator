@@ -3,6 +3,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import pickle
+import os
 
 # Sayfayı üç sütuna ayırıyoruz
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -61,11 +62,18 @@ with col3:
     st.markdown('<h4 class="small-font compact">Special Price:</h4>', unsafe_allow_html=True)
     
     # Modeli ve encoder'ı yükle
-    model = joblib.load("final_model.joblib")
-    with open('onehot_encoder.pkl', 'rb') as file:
-        loaded_encoder = pickle.load(file)
+    model_path = "final_model.joblib"
+    encoder_path = "onehot_encoder.pkl"
     
-    # Verileri hazırlama
+    if os.path.exists(model_path) and os.path.exists(encoder_path):
+        model = joblib.load(model_path)
+        with open(encoder_path, 'rb') as file:
+            loaded_encoder = pickle.load(file)
+    else:
+        st.error("Model or encoder file not found. Please ensure 'final_model.joblib' and 'onehot_encoder.pkl' are in the correct directory.")
+        st.stop()
+    
+  # Verileri hazırlama
     data = pd.DataFrame({
         'wine_score': [np.log(wine_score)],
         'age_of_wine': [np.log(vintage)],
@@ -85,6 +93,7 @@ with col3:
     for col in expected_columns:
         if col not in data.columns:
             data[col] = 0
+    data = data[expected_columns]
 
     # Tahmin
     predicted_price_log = model.predict(data)[0]
